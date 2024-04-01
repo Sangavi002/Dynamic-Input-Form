@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+    <style>
+        #root {
+            display: flex;
+            justify-content: center;
+        }
+        .my-button{
+            padding: 7px 15px;
+            margin-left: 10px;
+            border:none;
+            color: white;
+            font-size: 15px;
+        }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    function App(){
+        let [hobbies,setHobbies] = React.useState([])
+        let [hobbyValue, setHobbyValue] = React.useState('');
+
+        const handleAddInput = (value) => {
+            setHobbies([...hobbies,value]);
+            setHobbyValue('');
+        };
+
+        let handleHobbyValue = (e) => {
+            setHobbyValue(e.target.value)
+        }
+
+        let handleHobbyEdit = (index) => (e) => {
+            const newHobbies = [...hobbies];
+            newHobbies[index] = e.target.value;
+            setHobbies(newHobbies);
+        }
+
+        const handleRemove = (index) => {
+            const newHobbies = [...hobbies];
+            newHobbies.splice(index, 1);
+            setHobbies(newHobbies);
+        };
+
+        const handleSubmit = (event) => {
+            event.preventDefault();
+            console.log('Submitted Hobbies:', hobbies);
+        };
+        return(
+            <>
+            <form onSubmit={handleSubmit}>
+                <h1 style={{marginBottom: '10px'}}>Enter your Hobbies</h1>
+                <input type="text" style={{padding: '5px 10px'}} value={hobbyValue} onChange={handleHobbyValue}/>
+                <button type="button" className="my-button" style={{background: 'green'}}
+                    onClick={() => handleAddInput(hobbyValue)}>Add
+                </button>
+                {hobbies.map((hobby, index) => (
+                    <div key={index} style={{margin: '10px 0px'}}>
+                    <input type="text" style={{padding: '5px 10px'}} value={hobby} onChange={handleHobbyEdit(index)}/>
+                    <button type="button"  className="my-button" style={{background: 'red'}}
+                        onClick={() => handleRemove(index)}>Remove
+                    </button>
+                    </div>
+                ))}
+                <button type="submit"  className="my-button"style={{background: 'brown'}}>Submit</button> 
+            </form>
+            </>
+        )
+    }
+
+    let reactRoot = ReactDOM.createRoot(document.getElementById('root'));
+    reactRoot.render(<App />)
+  </script>
+</html>
